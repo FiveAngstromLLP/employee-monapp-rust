@@ -1,0 +1,55 @@
+name: Build and Test Leptos + Rocket App
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Rust
+      - name: Set up Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          components: rustfmt, clippy
+          override: true
+
+      # Step 3: Add WebAssembly target (required for Leptos)
+      - name: Add WebAssembly Target
+        run: rustup target add wasm32-unknown-unknown
+
+      # Step 4: Install necessary dependencies (e.g., wasm-bindgen)
+      - name: Install wasm-bindgen
+        run: cargo install wasm-bindgen-cli
+
+      # Step 5: Build the Rocket backend
+      - name: Build Rocket Backend
+        run: cargo build --release
+
+      # Step 6: Build the Leptos Frontend
+      - name: Build Leptos Frontend
+        run: |
+          cd src
+          wasm-pack build --target web
+
+      # Step 7: Run Tests (Optional)
+      - name: Run Tests
+        run: cargo test --release
+
+      # Step 8: Upload Build Artifacts (Optional)
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifacts
+          path: target/release/
