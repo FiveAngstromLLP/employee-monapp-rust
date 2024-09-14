@@ -3,16 +3,18 @@ name = "employee-monitoring-app"
 version = "0.1.0"
 edition = "2021"
 
-# Add these dependencies
 [dependencies]
+# Ensure to use a compatible version of Rocket
 rocket = { version = "0.5.0-rc.2", features = ["json"] }
+
+# Use specific versions of tokio and wasm-bindgen
+tokio = { version = "1.0", features = ["full"] }
+wasm-bindgen = "0.2.84"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-tokio = { version = "1.0", features = ["full"] }
+
+# Leptos requires a specific wasm-bindgen version
 leptos = { version = "0.2", features = ["ssr"] }
 
-
-
-[lib]
-crate-type = ["cdylib", "rlib"]
-path = "src/lib.rs"
+# Optional: Specify a known working version of `mio` if directly needed
+mio = "0.8" # Ensure this version is compatible with your environment
