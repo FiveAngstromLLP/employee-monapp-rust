@@ -3,10 +3,10 @@ name: Build and Deploy Leptos Frontend to GitHub Pages
 on:
   push:
     branches:
-      - main  # You can change this to your main branch
+      - main  # Change this to your main branch if different
   pull_request:
     branches:
-      - main  # Adjust as needed
+      - main
 
 jobs:
   build:
@@ -17,22 +17,23 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v3
 
-      # Step 2: Install Rust
+      # Step 2: Set up Rust with specific toolchain
       - name: Set up Rust
         uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
-          target: wasm32-unknown-unknown
+          components: rustfmt, clippy
+          override: true
 
-      # Step 3: Install `wasm-pack`
+      # Step 3: Install wasm-pack
       - name: Install wasm-pack
         run: cargo install wasm-pack
 
-      # Step 4: Build Leptos frontend using `wasm-pack`
+      # Step 4: Build Leptos frontend using wasm-pack
       - name: Build frontend
         run: wasm-pack build --target web
 
-      # Step 5: Copy build output to `public/` directory
+      # Step 5: Prepare files for GitHub Pages
       - name: Prepare files for GitHub Pages
         run: |
           mkdir -p public
