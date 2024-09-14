@@ -18,3 +18,5 @@ leptos = { version = "0.2", features = ["ssr"] }
 
 # Optional: Specify a known working version of `mio` if directly needed
 mio = "0.8" # Ensure this version is compatible with your environment
+[lib]
+crate-type = ["cdylib", "rlib"]
